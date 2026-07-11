@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Gallery</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{background:#111;color:#fff}
+.banner{position:relative;width:100%;height:320px;overflow:hidden}
+.banner img{width:100%;height:100%;object-fit:cover;display:block}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.75))}
+.banner-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:2;width:90%}
+.banner-text h1{font-size:60px;text-shadow:0 0 15px #000}
+.banner-text p{font-size:22px;color:#ddd}
+.gallery{max-width:1300px;margin:40px auto;padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+.card{background:#1d1d1d;border-radius:15px;overflow:hidden;transition:.25s;box-shadow:0 0 15px rgba(0,0,0,.4)}
+.card:hover{transform:translateY(-8px);box-shadow:0 0 20px rgba(255,255,255,.15)}
+.card a{color:#fff;text-decoration:none}
+.card img{width:100%;height:220px;object-fit:cover}
+.card h2{text-align:center;padding:15px}
+@media(max-width:900px){.gallery{grid-template-columns:repeat(2,1fr)}.banner-text h1{font-size:42px}.banner-text p{font-size:18px}}
+@media(max-width:600px){.gallery{grid-template-columns:1fr}.banner{height:220px}.banner-text h1{font-size:32px}.banner-text p{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="banner">
+<img id="bannerImage" src="" alt="Banner">
+<div class="banner-text"><h1>InstaMediaBay</h1><p>Where Media is Free</p></div>
+</div>
+<div class="gallery">
+<div class="card"><a href="https://google.com"><img src="https://files.catbox.moe/8f0k0h.png?1"><h2>Anime</h2></a></div>
+<div class="card"><a href="https://youtube.com"><img src="https://files.catbox.moe/uwtr33.png?2"><h2>Movies</h2></a></div>
+<div class="card"><a href="https://github.com"><img src="https://files.catbox.moe/pakgua.png?3"><h2>Games</h2></a></div>
+<div class="card"><a href="#"><img src="https://files.catbox.moe/d8ztft.png"><h2>Coming Soon</h2></a></div>
+<div class="card"><a href="#"><img src="https://files.catbox.moe/d8ztft.png"><h2>Coming Soon</h2></a></div>
+<div class="card"><a href="#"><img src="https://files.catbox.moe/d8ztft.png"><h2>Coming Soon</h2></a></div>
+</div>
+<script>
+const owner="InstaMediaBay";
+const repo="InstaMediaBay-MAIN";
+const branch="main";
+const folder="Banner";
+async function loadRandomBanner(){
+ try{
+  const api=`https://api.github.com/repos/${owner}/${repo}/contents/${folder}?ref=${branch}`;
+  const r=await fetch(api);
+  if(!r.ok) throw new Error("Failed to load banner folder");
+  const files=await r.json();
+  const images=files.filter(f=>/\.(png|jpg|jpeg|gif|webp)$/i.test(f.name));
+  if(images.length===0) throw new Error("No images");
+  const random=images[Math.floor(Math.random()*images.length)];
+  document.getElementById("bannerImage").src=random.download_url;
+ }catch(e){
+  console.error(e);
+  document.getElementById("bannerImage").src="https://placehold.co/1600x500/111111/ffffff?text=Banner";
+ }
+}
+loadRandomBanner();
+</script>
+</body></html>
